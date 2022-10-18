@@ -1,0 +1,145 @@
+{
+  "data": {
+    "brand": {
+      "name": .data.brand[0].name,
+      "companies": [for(.data.brand[0].companies)
+        {
+          "name": .name,
+          "cnpjNumber": .cnpjNumber,
+          "products": [for(.products)
+            {
+              "name": .name,
+              "code": .code,
+              "coverages": [for(.coverages)
+                let coverageAttributes = .coverageAttributes[0]
+                {
+                  "coverage": .coverage,
+                  "coverageDetail": .coverageDetail,
+                  "coveragePermissionSeparteAcquisition": .coveragePermissionSeparteAcquisition,
+                  "coverageAttributes": {
+                    "minLMI": {
+                      "amount": $coverageAttributes.minLMI[0].amount,
+                      "unit": {
+                        "code": $coverageAttributes.minLMI[0].unit[0].code,
+                        "description": $coverageAttributes.minLMI[0].unit[0].description
+                      }
+                    },
+                    "maxLMI": {
+                      "amount": $coverageAttributes.maxLMI[0].amount,
+                      "unit": {
+                        "code": $coverageAttributes.maxLMI[0].unit[0].code,
+                        "description": $coverageAttributes.maxLMI[0].unit[0].description
+                      }
+                    },
+                    "contractBase": [for($coverageAttributes.contractBase)
+                     let contractBaseType = .contractBaseType[0]
+                      {
+                        "contractBaseType": $contractBaseType,
+                        "contractBaseMinValue": {
+                          "amount": $contractBaseType.contractBaseMinValue,
+                          "unit": {
+                            "code": "R$",
+                            "description": "Real"
+                          }
+                        },
+                        "contractBaseMaxValue": {
+                          "amount": $contractBaseType.contractBaseMaxValue,
+                          "unit": {
+                            "code": "R$",
+                            "description": "Real"
+                          }
+                        }
+                      }
+                    ],
+                    "newCarMaximumCalculatingPeriod": $coverageAttributes.newCarMaximumCalculatingPeriod,
+                    "newCarContractBase": [for($coverageAttributes.newCarContractBase)
+                      {
+                        "contractBaseType": .contractBaseType,
+                        "contractBaseMinValue": {
+                          "amount": .contractBaseMinValue,
+                          "unit": {
+                            "code": "R$",
+                            "description": "Real"
+                          }
+                        },
+                        "contractBaseMaxValue": {
+                          "amount": .contractBaseMaxValue,
+                          "unit": {
+                            "code": "R$",
+                            "description": "Real"
+                          }
+                        }
+                      }
+                    ],
+                    "fullIndemnityPercentage": {
+                      "amount": $coverageAttributes.fullIndemnityPercentage[0].amount,
+                      "unit": {
+                        "code": $coverageAttributes.fullIndemnityPercentage[0].unit[0].code,
+                        "description": $coverageAttributes.fullIndemnityPercentage[0].unit[0].description
+                      }
+                    },
+                    "deductibleType": $coverageAttributes.deductibleType,
+                    "fullIndemnityDeductible": $coverageAttributes.fullIndemnityDeductible,
+                    "deductiblePaymentByCoverage": $coverageAttributes.deductiblePaymentByCoverage,
+                    "deductiblePercentage": {
+                      "amount": $coverageAttributes.deductiblePercentage[0].amount,
+                      "unit": {
+                        "code": $coverageAttributes.deductiblePercentage[0].unit[0].code,
+                        "description": $coverageAttributes.deductiblePercentage[0].unit[0].description
+                      }
+                    },
+                    "mandatoryParticipation": $coverageAttributes.mandatoryParticipation,
+                    "geographicScopeCoverage": $coverageAttributes.geographicScopeCoverage,
+                    "geographicScopeCoverageOthers": $coverageAttributes.geographicScopeCoverageOthers
+                  }
+                }
+              ],
+              "carParts": [for(.carParts)
+                {
+                  "carPartCondition": .carPartCondition,
+                  "carPartType": .carPartType
+                }
+              ],
+              "carModels": [for(.carModels)
+                {
+                  "manufacturer": .manufacturer,
+                  "model": .model,
+                  "year": .year,
+                  "fipeCode": .fipeCode
+                }
+              ],
+              "vehicleOvernightZipCode": .vehicleOvernightZipCode,
+              "additional": .additional,
+              "additionalOthers": .additionalOthers,
+              "assistanceServices": [for(.assistanceServices)
+                {
+                  "assistanceServicesPackage": .assistanceServicesPackage,
+                  "assistanceServicesDetail": .assistanceServicesDetail,
+                  "chargeTypeSignaling": .chargeTypeSignaling
+                }
+              ],
+              "termsAndConditions": [for(.termsAndConditions)
+                {
+                  "susepProcessNumber": .susepProcessNumber,
+                  "definition": .definition
+                }
+              ],
+              "terms": .terms,
+              "customerService": .customerService,
+              "premiumPayment": {
+                "paymentMethod": .premiumPayment[0].paymentMethod,
+                "paymentType": .premiumPayment[0].paymentType,
+                "paymentDetail": .premiumPayment[0].paymentDetail
+              },
+              "minimumRequirements": {
+                "contractingType": .minimumRequirements[0].contractingType,
+                "contractingMinRequirement": .minimumRequirements[0].contractingMinRequirement
+              },
+              "targetAudiences": .targetAudiences
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
