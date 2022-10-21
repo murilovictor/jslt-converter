@@ -1,0 +1,633 @@
+{
+  "type": "object",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "required": [
+    "data",
+    "links",
+    "meta"
+  ],
+  "properties": {
+    "data": {
+      "type": "object",
+      "properties": {
+        "brand": {
+          "type": "object",
+          "$schema": "http://json-schema.org/draft-04/schema#",
+          "required": [
+            "name"
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "example": "EMPRESA A seguros",
+              "maxLength": 80,
+              "description": "Nome da marca reportada pelo participante do Open Insurance. O conceito a que se refere a marca é em essência uma promessa das sociedades sob ela em fornecer uma série específica de atributos, benefícios e serviços uniformes aos clientes."
+            },
+            "company": {
+              "type": "array",
+              "items": {
+                "required": [
+                  "name",
+                  "cnpjNumber"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "ABCDE SEGUROS",
+                    "maxLength": 80,
+                    "description": "Nome da sociedade pertencente à marca."
+                  },
+                  "products": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "name",
+                        "code",
+                        "coverages",
+                        "propertyCharacteristics",
+                        "propertyZipCode",
+                        "protective",
+                        "additional",
+                        "assistanceServices",
+                        "microInsurance",
+                        "termsAndConditions",
+                        "validity",
+                        "customerServices",
+                        "premiumPayments",
+                        "minimumRequirements",
+                        "targetAudiences"
+                      ],
+                      "properties": {
+                        "code": {
+                          "type": "string",
+                          "example": "0000-0",
+                          "maxLength": 80,
+                          "description": "Código único a ser definido pela sociedade."
+                        },
+                        "name": {
+                          "type": "string",
+                          "example": "RESIDENCIAL XPTO",
+                          "maxLength": 80,
+                          "description": "Nome comercial do produto, pelo qual é identificado nos canais de distribuição e atendimento da sociedade."
+
+                        },
+                        "validity": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "required": [
+                              "term"
+                            ],
+                            "properties": {
+                              "term": {
+                                "enum": [
+                                  "ANUAL",
+                                  "ANUAL_INTERMITENTE",
+                                  "PLURIANUAL",
+                                  "PLURIANUAL_INTERMITENTE",
+                                  "MENSAL",
+                                  "MENSAL_INTERMITENTE",
+                                  "DIARIO",
+                                  "DIARIO_INTERMITENTE",
+                                  "OUTROS"
+                                ],
+                                "type": "string",
+                                "example": "ANUAL",
+                                "description": "Prazo de vigência do seguro contratado Intervalo contínuo de tempo durante o qual está em vigor o contrato de seguro. (RESOLUÇÃO CNSP Nº 341/2016)."
+
+                              },
+                              "termOthers": {
+                                "type": "string",
+                                "maxLength": 100,
+                                "description": "Campo livre para descrição por cada participante ao selecionar o domínio “Outros” no campo Prazo (acima)."
+
+                              }
+                            }
+                          },
+                          "$schema": "http://json-schema.org/draft-04/schema#",
+                          "description": "Vigência"
+                        },
+                        "coverages": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "required": [
+                              "coverageType",
+                              "coverageDetail",
+                              "coveragePermissionSeparteAquisition",
+                              "coverageAttributes"
+                            ],
+                            "properties": {
+                              "coverageType": {
+                                "enum": [
+                                  "IMOVEL_BASICA",
+                                  "IMOVEL_AMPLA",
+                                  "DANOS_ELETRICOS",
+                                  "DANOS_POR_AGUA",
+                                  "ALAGAMENTO",
+                                  "RESPONSABILIDADE_CIVIL_FAMILIAR",
+                                  "RESPONSABILIDADE_CIVIL_DANOS_MORAIS",
+                                  "ROUBO_SUBTRACAO_BENS",
+                                  "ROUBO_SUBTRACAO_BENS_FORA_LOCAL_SEGURADO",
+                                  "TACOS_GOLFE_HOLE_ONE",
+                                  "PEQUENAS_REFORMAS_OBRAS",
+                                  "GREVES_TUMULTOS_LOCKOUT",
+                                  "MICROEMPREENDEDOR",
+                                  "ESCRITORIO_RESIDENCIA",
+                                  "DANOS_EQUIPAMENTOS_ELETRONICOS",
+                                  "QUEBRA_VIDROS",
+                                  "IMPACTO_VEICULOS",
+                                  "VENDAVAL",
+                                  "PERDA_PAGAMENTO_ALUGUEL",
+                                  "BICICLETA",
+                                  "RESPONSABILIDADE_CIVIL_BICICLETA",
+                                  "RC_EMPREGADOR",
+                                  "DESMORONAMENTO",
+                                  "DESPESAS_EXTRAORDINARIAS",
+                                  "JOIAS_OBRAS_ARTE",
+                                  "TERREMOTO",
+                                  "IMPACTO_AERONAVES",
+                                  "PAISAGISMO",
+                                  "INCENDIO",
+                                  "QUEDA_RAIO",
+                                  "EXPLOSAO",
+                                  "OUTRAS"
+                                ],
+                                "type": "string",
+                                "example": "Escritório em Residência",
+                                "maxLength": 1000,
+                                "description": "Nome do tipo da cobertura."
+                              },
+                              "coverageDetail": {
+                                "type": "string",
+                                "example": "Cobertura especial para escritório residenciais",
+                                "maxLength": 1000,
+                                "description": "Campo aberto para detalhamento por coberturas possíveis dos produtos a ser feito por cada participante."
+                              },
+                              "coverageAttributes": {
+                                "type": "object",
+                                "$schema": "http://json-schema.org/draft-04/schema#",
+                                "required": [
+                                  "minLMI",
+                                  "maxLMI",
+                                  "minDeductibleAmount",
+                                  "insuredMandatoryParticipationPercentage"
+                                ],
+                                "properties": {
+                                  "maxLMI": {
+                                    "type": "object",
+                                    "$schema": "http://json-schema.org/draft-04/schema#",
+                                    "required": [
+                                      "amount",
+                                      "unit"
+                                    ],
+                                    "properties": {
+                                      "unit": {
+                                        "type": "object",
+                                        "$schema": "http://json-schema.org/draft-04/schema#",
+                                        "required": [
+                                          "code",
+                                          "description"
+                                        ],
+                                        "properties": {
+                                          "code": {
+                                            "type": "string",
+                                            "example": "R$"
+                                          },
+                                          "description": {
+                                            "type": "string",
+                                            "example": "REAL"
+                                          }
+                                        }
+                                      },
+                                      "amount": {
+                                        "type": "number"
+                                      }
+                                    }
+                                  },
+                                  "minLMI": {
+                                    "type": "object",
+                                    "$schema": "http://json-schema.org/draft-04/schema#",
+                                    "required": [
+                                      "amount",
+                                      "unit"
+                                    ],
+                                    "properties": {
+                                      "unit": {
+                                        "type": "object",
+                                        "$schema": "http://json-schema.org/draft-04/schema#",
+                                        "required": [
+                                          "code",
+                                          "description"
+                                        ],
+                                        "properties": {
+                                          "code": {
+                                            "type": "string",
+                                            "example": "R$"
+                                          },
+                                          "description": {
+                                            "type": "string",
+                                            "example": "REAL"
+                                          }
+                                        }
+                                      },
+                                      "amount": {
+                                        "type": "number"
+                                      }
+                                    }
+                                  },
+                                  "minDeductibleAmount": {
+                                    "type": "object",
+                                    "$schema": "http://json-schema.org/draft-04/schema#",
+                                    "required": [
+                                      "amount",
+                                      "unit"
+                                    ],
+                                    "properties": {
+                                      "unit": {
+                                        "type": "object",
+                                        "$schema": "http://json-schema.org/draft-04/schema#",
+                                        "required": [
+                                          "code",
+                                          "description"
+                                        ],
+                                        "properties": {
+                                          "code": {
+                                            "type": "string",
+                                            "example": "R$"
+                                          },
+                                          "description": {
+                                            "type": "string",
+                                            "example": "REAL"
+                                          }
+                                        }
+                                      },
+                                      "amount": {
+                                        "type": "number"
+                                      }
+                                    }
+                                  },
+                                  "insuredMandatoryParticipationPercentage": {
+                                    "type": "number",
+                                    "maxLength": 9,
+                                    "description": "Listagem percentual de franquia e/ou percentual de participação obrigatória do segurado estabelecida pela sociedade para cada tipo de cobertura de produto."
+
+                                  }
+                                },
+                                "description": "Informações de cobertura do Seguro Residencial."
+                              },
+                              "coveragePermissionSeparteAquisition": {
+                                "type": "boolean",
+                                "example": false,
+                                "description": "Indicação se a cobertura permite contratação separada (por cobertura selecionada)."
+
+                              }
+                            }
+                          },
+                          "$schema": "http://json-schema.org/draft-04/schema#",
+                          "description": "Listagem de coberturas incluídas no produto."
+                        },
+                        "additional": {
+                          "type": "array",
+                          "items": {
+                            "enum": [
+                              "SORTEIO_GRATUITO",
+                              "CLUBE_BENEFICIOS",
+                              "CASHBACK",
+                              "DESCONTOS",
+                              "OUTROS"
+                            ],
+                            "type": "string",
+                            "example": "SORTEIO_GRATUITO",
+                            "description": "Adicionais do Produto."
+                          }
+                        },
+                        "protective": {
+                          "type": "boolean",
+                          "example": true,
+                          "description": "Protecionais - Indicativo de exigência de itens protecionais."
+                        },
+                        "premiumRates": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          },
+                          "description": "Distribuição de frequência relativa aos valores referentes às taxas cobradas."
+                        },
+                        "microInsurance": {
+                          "type": "boolean",
+                          "example": true,
+                          "description": "Indicação se o produto é classificado como microsseguro."
+                        },
+                        "premiumPayments": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "required": [
+                              "paymentMethod",
+                              "paymentType"
+                            ],
+                            "properties": {
+                              "paymentType": {
+                                "enum": [
+                                  "PAGAMENTO_UNICO",
+                                  "PARCELADO",
+                                  "AMBOS"
+                                ],
+                                "type": "string",
+                                "example": "PAGAMENTO_UNICO",
+                                "description": "Forma de pagamento"
+                              },
+                              "paymentMethod": {
+                                "enum": [
+                                  "CARTAO_CREDITO",
+                                  "CARTAO_DEBITO",
+                                  "DEBITO_CONTA_CORRENTE",
+                                  "DEBITO_CONTA_POUPANCA",
+                                  "BOLETO_BANCARIO",
+                                  "PIX",
+                                  "CONSIGINACAO_FOLHA_PAGAMENTO",
+                                  "PONTOS_PROGRAMAS_BENEFICIO",
+                                  "OUTROS"
+                                ],
+                                "type": "string",
+                                "example": "CARTAO_CREDITO",
+                                "description": "Meio de pagamento escolhido pelo segurado."
+                              },
+                              "paymentMethodDetail": {
+                                "type": "string",
+                                "maxLength": 100,
+                                "description": "Campo aberto para detalhamento do campo ‘Outros’ por cada participante."
+                              }
+                            }
+                          },
+                          "$schema": "http://json-schema.org/draft-04/schema#",
+                          "description": "Informações de pagamento de prêmio."
+                        },
+                        "propertyZipCode": {
+                          "type": "string",
+                          "example": "1311000",
+                          "maxLength": 8,
+                          "description": "Código de Endereçamento Postal do Imóvel"
+                        },
+                        "targetAudiences": {
+                          "type": "array",
+                          "items": {
+                            "enum": [
+                              "PESSOA_NATURAL",
+                              "PESSOA_JURIDICA",
+                              "AMBAS"
+                            ],
+                            "type": "string",
+                            "example": "PESSOA_NATURAL",
+                            "description": "Público a quem se destina o produto"
+                          }
+                        },
+                        "additionalOthers": {
+                          "type": "string",
+                          "maxLength": 100,
+                          "description": "Campo aberto para descrição de cada participante ao selecionar o domínio ‘Outros’ no campo acima ‘Adicionais’."
+
+                        },
+                        "customerServices": {
+                          "type": "array",
+                          "items": {
+                            "enum": [
+                              "REDE_REFERENCIADA",
+                              "LIVRE_ESCOLHA",
+                              "REDE_REFERENCIADA_LIVRE_ESCOLHA"
+                            ],
+                            "type": "string",
+                            "example": "LIVRE_ESCOLHA"
+                          },
+                          "description": "Informações de pagamento de prêmio."
+                        },
+                        "assistanceServices": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "required": [
+                              "assistanceServicesPackage",
+                              "complementaryAssistanceServicesDetail",
+                              "chargeTypeSignaling"
+                            ],
+                            "properties": {
+                              "chargeTypeSignaling": {
+                                "enum": [
+                                  "GRATUITA",
+                                  "PAGO"
+                                ],
+                                "type": "string",
+                                "example": "GRATUITA",
+                                "description": "Sinalização em campo exclusivo se o pacote de Assistência é gratuita ou contratada/paga."
+
+                              },
+                              "assistanceServicesPackage": {
+                                "enum": [
+                                  "ATE_10_SERVICOS",
+                                  "ATE_20_SERVICOS",
+                                  "ACIMA_20_SERVICOS",
+                                  "CUSTOMIZAVEL"
+                                ],
+                                "type": "string",
+                                "example": "ATE_10_SERVICOS",
+                                "description": "Pacotes de Assistência."
+                              },
+                              "complementaryAssistanceServicesDetail": {
+                                "type": "string",
+                                "example": "reboque pane seca",
+                                "maxLength": 1000,
+                                "description": "Campo livre para descrição dos serviços ofertados por cada sociedade participante."
+
+                              }
+                            }
+                          },
+                          "$schema": "http://json-schema.org/draft-04/schema#",
+                          "description": "Agrupamento dos serviços de assistências disponíveis vinculado ao produto."
+                        },
+                        "termsAndConditions": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "required": [
+                              "susepProcessNumber",
+                              "definition"
+                            ],
+                            "properties": {
+                              "definition": {
+                                "type": "string",
+                                "example": "https://openinsurance.com.br/aaa",
+                                "maxLength": 1024,
+                                "description": "Campo aberto (possibilidade de incluir uma url)."
+                              },
+                              "susepProcessNumber": {
+                                "type": "string",
+                                "example": "XXXXX.XXXXXX/XXXX-XX",
+                                "maxLength": 20,
+                                "description": "Número do processo SUSEP."
+                              }
+                            }
+                          },
+                          "$schema": "http://json-schema.org/draft-04/schema#",
+                          "description": "Informações dos termos e condições conforme número do processo SUSEP."
+                        },
+                        "minimumRequirements": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "$schema": "http://json-schema.org/draft-04/schema#",
+                            "required": [
+                              "contractingMinRequirement",
+                              "contractingType"
+                            ],
+                            "properties": {
+                              "contractingType": {
+                                "enum": [
+                                  "COLETIVO",
+                                  "INDIVIDUAL",
+                                  "AMBAS"
+                                ],
+                                "type": "string",
+                                "description": "Tipo de contratação."
+                              },
+                              "contractingMinRequirement": {
+                                "type": "string",
+                                "example": "https://openinsurance.com.br/aaa",
+                                "maxLength": 1024,
+                                "description": "Campo aberto contendo todos os requisitos mínimos para contratação (possibilidade de incluir URL)."
+
+                              }
+                            },
+                            "description": "Produtos de Seguro Residencial."
+                          }
+                        },
+                        "propertyCharacteristics": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "required": [
+                              "propertyType",
+                              "propertyUsageType",
+                              "propertyBuildType",
+                              "destinationInsuredImportance"
+                            ],
+                            "properties": {
+                              "propertyType": {
+                                "enum": [
+                                  "CASA",
+                                  "APARTAMENTO"
+                                ],
+                                "type": "string",
+                                "example": "CASA",
+                                "description": "Tipo de imóvel."
+                              },
+                              "propertyBuildType": {
+                                "enum": [
+                                  "ALVENARIA",
+                                  "MADEIRA",
+                                  "METALICA",
+                                  "MISTA"
+                                ],
+                                "type": "string",
+                                "example": "ALVENARIA",
+                                "description": "Descrição do tipo de construção da propriedade."
+                              },
+                              "propertyUsageType": {
+                                "enum": [
+                                  "HABITUAL",
+                                  "VERANEIO",
+                                  "DESOCUPADO",
+                                  "CASA_ESCRITORIO",
+                                  "ALUGUEL_TEMPORADA"
+                                ],
+                                "type": "string",
+                                "example": "HABITUAL",
+                                "description": "Descrição do tipo de uso da propriedade."
+                              },
+                              "destinationInsuredImportance": {
+                                "enum": [
+                                  "PREDIO",
+                                  "CONTEUDO",
+                                  "AMBOS"
+                                ],
+                                "type": "string",
+                                "example": "PREDIO",
+                                "description": "Destinação da Importância Segurada."
+                              }
+                            }
+                          },
+                          "$schema": "http://json-schema.org/draft-04/schema#",
+                          "description": "Caracteristicas do imóvel."
+                        }
+                      }
+                    },
+                    "$schema": "http://json-schema.org/draft-04/schema#",
+                    "description": "Produtos de Seguro Residencial."
+                  },
+                  "cnpjNumber": {
+                    "type": "string",
+                    "example": 12345678901234,
+                    "maxLength": 14,
+                    "description": "CNPJ da sociedade pertencente à marca."
+                  }
+                },
+                "description": "Informações referente a sociedade a qual a marca pertence."
+              },
+              "$schema": "http://json-schema.org/draft-04/schema#"
+            }
+          }
+        }
+      }
+    },
+    "meta": {
+      "type": "object",
+      "$schema": "http://json-schema.org/draft-04/schema#",
+      "required": [
+        "totalRecords",
+        "totalPages"
+      ],
+      "properties": {
+        "totalPages": {
+          "type": "integer",
+          "example": 1,
+          "description": "Total de páginas para os registros encontrados"
+        },
+        "totalRecords": {
+          "type": "integer",
+          "example": 10,
+          "description": "Total de registros encontrados"
+        }
+      }
+    },
+    "links": {
+      "type": "object",
+      "$schema": "http://json-schema.org/draft-04/schema#",
+      "properties": {
+        "last": {
+          "type": "string",
+          "example": "https://api.organizacao.com.br/open-insurance/products-services/v1",
+          "description": "URL da última página de registros"
+        },
+        "next": {
+          "type": "string",
+          "description": "URL da próxima página de registros"
+        },
+        "prev": {
+          "type": "string",
+          "description": "URL da página anterior de registros"
+        },
+        "self": {
+          "type": "string",
+          "example": "https://api.organizacao.com.br/open-insurance/products-services/v1",
+          "description": "URL da página atualmente requisitada"
+        },
+        "first": {
+          "type": "string",
+          "example": "https://api.organizacao.com.br/open-insurance/products-services/v1",
+          "description": "URL da primeira página de registros"
+        }
+      }
+    }
+  }
+}

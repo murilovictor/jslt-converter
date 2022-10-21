@@ -1,5 +1,7 @@
 package br.com.hdi.jsltconverter.service;
 
+import br.com.hdi.jslt.utils.CustomFunctionsUtil;
+import br.com.hdi.jsltconverter.model.ConverterModel;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.schibsted.spt.data.jslt.Expression;
@@ -19,51 +21,68 @@ import java.nio.file.Paths;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static org.apache.logging.log4j.util.Strings.isEmpty;
+
 @Slf4j
 @Service
-public class ConverterService {
+public class JsltConverterService {
 
-    public void transform() {
+    @SneakyThrows
+    public void convertJsonFromJslt(ConverterModel converterModel) {
+
+        log.info("Start - Converter Json");
         long start = System.currentTimeMillis();
 
-        JsonNode input = loadJsonInput();
-        String jsltTemplate = loadJsltTemplate();
+        converterModel.setJsonInput(this.loadJsonInput(converterModel));
 
-        Expression jslt = Parser.compileString(jsltTemplate);
-        JsonNode output = jslt.apply(input);
+        String jsltTemplate = this.loadJsltTemplate(converterModel);
 
-        exportFile(output);
+        Expression jslt = Parser.compileString(jsltTemplate, CustomFunctionsUtil.loadCustomFunctions());
+        JsonNode output = jslt.apply(converterModel.getJsonInput());
+
+        converterModel.setJsonOutput(output);
+
+        exportFile(output, converterModel);
 
         long end = System.currentTimeMillis();
 
-        log.info("The End. Time: " + (end - start) + "ms");
+        log.info("End - Converter Json -> Time: " + (end - start) + "ms");
+
     }
 
-    private void exportFile(JsonNode output) {
+    private void exportFile(JsonNode output, ConverterModel directory) {
+        if (isEmpty(directory.getPathOut())) {
+            log.info("Informe o caminho de output para exportar o arquivo.");
+            return;
+        }
+
         log.info("Inicio - Gravar arquivo.");
-        try (FileWriter file = new FileWriter("src/main/resources/static/output.json")) {
+
+        try (FileWriter file = new FileWriter(directory.getPathOut())) {
             file.write(output.toPrettyString());
             file.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         log.info("Fim - Gravar arquivo.");
+
     }
 
     @SneakyThrows
-    private JsonNode loadJsonInput() {
-        log.info("Inicio - Carregando Input.");
+    private JsonNode loadJsonInput(ConverterModel converterModel) {
+        log.info("Inicio - Carregando File Input.");
         JSONParser jsonParser = new JSONParser();
-        JSONObject jsonObject = (JSONObject) jsonParser.parse(new FileReader("src/main/resources/static/input.json"));
+        JSONObject jsonObject = (JSONObject) jsonParser.parse(new FileReader(converterModel.getPathIn()));
         log.info("Fim - Carregando Input.");
         return toJsonNode(jsonObject);
     }
 
     @SneakyThrows
-    private String loadJsltTemplate() {
+    private String loadJsltTemplate(ConverterModel converterModel) {
         log.info("Inicio - Carregando Template JSLT.");
         Path path = Paths.get(getClass().getClassLoader()
-                .getResource("static/transform.jslt").toURI());
+                .getResource(converterModel.getPathJsltTemplate()).toURI());
 
         Stream<String> lines = Files.lines(path);
         String data = lines.collect(Collectors.joining("\n"));

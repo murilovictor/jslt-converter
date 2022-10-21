@@ -57,7 +57,26 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>br.com.hdi</groupId>
+            <artifactId>jslt-functions</artifactId>
+            <version>1.0.17</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.networknt/json-schema-validator -->
+        <dependency>
+            <groupId>com.networknt</groupId>
+            <artifactId>json-schema-validator</artifactId>
+            <version>1.0.73</version>
+        </dependency>
     </dependencies>
+
+    <repositories>
+        <repository>
+            <id>hdi</id>
+            <url>http://developer-repo.hdi.com.br:8081/nexus/repository/remote-repos/</url>
+        </repository>
+    </repositories>
 
     <build>
         <plugins>

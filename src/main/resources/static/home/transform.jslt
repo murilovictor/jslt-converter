@@ -1,0 +1,140 @@
+let brand = .ds_integracao_patri_opin.brand[0]
+
+def toBoolean(field)
+  if($field == "yes" or $field == "YES" or $field == "TRUE" or $field == "true") true else false
+
+def isEmpty(field)
+  if ($field == "null" or $field == "" or $field == null) true else false
+
+def ifEmptyThenSetDefault(field, defaultValue)
+  if ( isEmpty($field) )
+    if ( is-array($defaultValue) )
+      [ $defaultValue ]
+    else
+      $defaultValue
+  else
+    if ( is-array($field) )
+      [ $field ]
+    else
+      $field
+
+def toArray(field)
+  if( isEmpty($field) ) null else [$field]
+
+{
+  "data": {
+    "brand": {
+      "name": $brand.name,
+      "company": [for($brand.company)
+        {
+          "name": .name,
+          "cnpjNumber": .cnpjNumber,
+          "products": [for(.products)
+            {
+              "name": .name,
+              "code": .code,
+              "coverages": [for(.coverages)
+              let coverageAttributes = .coverageAttributes[0]
+                {
+                  "coverageType": if(.coverageType == "OUTROS") "OUTRAS" else .coverageType,
+                  "coverageDetail": .coverageDetail,
+                  "coveragePermissionSeparteAquisition": toBoolean(.coveragePermissionSeparteAcquisition),
+                  "coverageAttributes": {
+                  "minLMI": {
+                    "amount": number($coverageAttributes.minLMI[0].amount),
+                    "unit": {
+                      "code": $coverageAttributes.minLMI[0].unit[0].code,
+                      "description": $coverageAttributes.minLMI[0].unit[0].description
+                    }
+                  },
+                  "maxLMI": {
+                    "amount": number($coverageAttributes.maxLMI[0].amount),
+                    "unit": {
+                      "code": $coverageAttributes.maxLMI[0].unit[0].code,
+                      "description": $coverageAttributes.maxLMI[0].unit[0].description
+                    }
+                  },
+                  "minDeductibleAmount": {
+                     "amount": number($coverageAttributes.minDeductibleAmount[0].amount),
+                     "unit": {
+                         "code": $coverageAttributes.minDeductibleAmount[0].unit_minDeductibleAmount[0].code,
+                         "description": $coverageAttributes.minDeductibleAmount[0].unit_minDeductibleAmount[0].description
+                     }
+                  },
+                  "insuredMandatoryParticipationPercentage": number(.insuredMandatoryParticipationPercentage)
+                  }
+                }
+              ],
+              "propertyCharacteristics": [for(.propertyCharacteristics)
+                {
+                  "propertyType": .propertyType,
+                  "propertyBuildType": .propertyBuildType,
+                  "propertyUsageType": .propertyUsageType,
+                  "destinationInsuredImportance": ifEmptyThenSetDefault(.importanceInsured, "AMBOS") // TODO Verificar com a Pamela
+                }
+              ],
+              "propertyZipCode": .propertyZipCode,
+              "protective": toBoolean(.protective),
+              "additional":  ifEmptyThenSetDefault(toArray(.additional), toArray("OUTROS"))[0], // TODO Verificar com a Pamela
+              "additionalOthers": .additionalOthers,
+              "assistanceServices": if (.assistanceServices) [for(.assistanceServices)
+                let chargeTypeSignaling = if(.chargeTypeSignaling == "PAGA") "PAGO" else .chargeTypeSignaling
+                {
+                  "assistanceServicesPackage": .assistanceServicesPackage,
+                  "complementaryAssistanceServicesDetail": .complementaryAssistanceServicesDetail,
+                  "chargeTypeSignaling": ifEmptyThenSetDefault($chargeTypeSignaling, "PAGO") // TODO Verificar com a Pamela
+                }
+              ] else [
+                {
+                  "assistanceServicesPackage": "ATE_10_SERVICOS", // TODO Verificar com a Pamela
+                  "complementaryAssistanceServicesDetail": "Beneficios Essenciais", // TODO Verificar com a Pamela
+                  "chargeTypeSignaling": "PAGO" // TODO Verificar com a Pamela
+                }
+              ],
+              "microInsurance": true,
+              "termsAndConditions": [for(.termsAndConditions)
+                {
+                  "susepProcessNumber": .susepProcessNumber,
+                  "definition": .name
+                }
+              ],
+              "validity": [for(.validity)
+                {
+                  "term": .term,
+                  "termOthers": .termOthers
+                }
+              ],
+              "customerServices": .customerServices,
+              "premiumRates": .premiumRates,
+              "premiumPayments": [for(.premiumPayments)
+                {
+                  "paymentMethod": .paymentMethod,
+                  "paymentMethodDetail": .paymentMethodDetail,
+                  "paymentType": .paymentType
+                }
+              ],
+              "minimumRequirements": [
+                {
+                  "contractingType": "COLETIVO", // TODO Verificar com a Pamela
+                  "contractingMinRequirement": .minimumRequirements
+                }
+              ],
+              "targetAudiences": .targetAudiences
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "links": {
+    "self": "https://api.organizacao.com.br/open-insurance/products-services/v1",
+    "first": "https://api.organizacao.com.br/open-insurance/products-services/v1",
+    "prev": "string",
+    "next": "string",
+    "last": "https://api.organizacao.com.br/open-insurance/products-services/v1"
+  },
+  "meta": {
+    "totalRecords": 10,
+    "totalPages": 1
+  }
+}

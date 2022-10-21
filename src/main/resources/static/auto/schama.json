@@ -22,14 +22,14 @@
                         "code": "string",
                         "description": "string"
                       }
-                    },
+                    }, // TODO
                     "maxLMI": {
                       "amount": 0,
                       "unit": {
                         "code": "string",
                         "description": "string"
                       }
-                    },
+                    }, // TODO
                     "contractBase": [
                       {
                         "contractBaseType": "VALOR_DETERMINADO",
@@ -48,9 +48,9 @@
                           }
                         }
                       }
-                    ],
+                    ], // TODO
                     "newCarMaximumCalculatingPeriod": 12,
-                    "newCarContractBase": [
+                    "newCarContractBase": [ // TODO Não Obrigatório
                       {
                         "contractBaseType": "VALOR_DETERMINADO",
                         "contractBaseMinValue": {
@@ -69,7 +69,7 @@
                         }
                       }
                     ],
-                    "fullIndemnityPercentage": {
+                    "fullIndemnityPercentage": { // TODO
                       "amount": 0,
                       "unit": {
                         "code": "string",
@@ -81,7 +81,7 @@
                     ],
                     "fullIndemnityDeductible": true,
                     "deductiblePaymentByCoverage": true,
-                    "deductiblePercentage": {
+                    "deductiblePercentage": { // TODO
                       "amount": 0,
                       "unit": {
                         "code": "string",
@@ -98,8 +98,8 @@
               ],
               "carParts": [
                 {
-                  "carPartCondition": "NOVAS",
-                  "carPartType": "ORIGINAIS"
+                  "carPartType": "ORIGINAIS",
+                  "carPartCondition": "NOVAS"
                 }
               ],
               "carModels": [
