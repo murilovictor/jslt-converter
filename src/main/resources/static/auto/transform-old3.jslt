@@ -80,7 +80,14 @@ def toBoolean(field)
                   "carPartType": .carPartType
                 }
               ],
-              "carModels": distinctModels(.carModels, "fipeCode|model|manufacturer|year"),
+              "carModels": [for(.carModels)
+                {
+                  "manufacturer": .manufacturer,
+                  "model": .model,
+                  "year": .year,
+                  "fipeCode": .fipeCode
+                }
+              ],
               "vehicleOvernightZipCode": .vehicleOvernightZipCode,
               "additional": .additional,
               "additionalOthers": .additionalOthers[0],

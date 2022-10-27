@@ -1,6 +1,7 @@
 package br.com.hdi.jsltconverter.exception.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.networknt.schema.ValidationMessage;
 import lombok.AllArgsConstructor;
@@ -14,6 +15,7 @@ import java.io.Serializable;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApiMessage implements Serializable {
 
     private static final long serialVersionUID = 7242344463403853932L;

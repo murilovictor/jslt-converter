@@ -1,5 +1,6 @@
 package br.com.hdi.jsltconverter.exception.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,6 +15,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApiErrorResponse implements Serializable {
 
     private static final long serialVersionUID = 3156631615464553575L;
