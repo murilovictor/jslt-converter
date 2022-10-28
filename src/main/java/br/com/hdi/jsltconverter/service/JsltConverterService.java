@@ -3,22 +3,19 @@ package br.com.hdi.jsltconverter.service;
 import br.com.hdi.jslt.utils.CustomFunctionsUtil;
 import br.com.hdi.jsltconverter.exception.TechnicalException;
 import br.com.hdi.jsltconverter.function.DistinctArrayFunction;
-import br.com.hdi.jsltconverter.message.enumeration.MessageUtil;
 import br.com.hdi.jsltconverter.model.ConverterModel;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.schibsted.spt.data.jslt.Expression;
 import com.schibsted.spt.data.jslt.Function;
 import com.schibsted.spt.data.jslt.Parser;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.stereotype.Service;
 
 import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -26,89 +23,85 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static java.util.Objects.isNull;
+import static br.com.hdi.jsltconverter.message.enumeration.MessageUtil.ERROR_CONVERTING_OBJECT_TO_JSONNODE;
+import static br.com.hdi.jsltconverter.message.enumeration.MessageUtil.ERROR_LOADING_JSLT_CUSTOM_FUNCTION;
+import static br.com.hdi.jsltconverter.message.enumeration.MessageUtil.ERROR_READING_INPUT_FILE;
+import static br.com.hdi.jsltconverter.message.enumeration.MessageUtil.ERROR_READING_JSLT_TEMPLATE;
 import static org.apache.logging.log4j.util.Strings.isEmpty;
 
 @Slf4j
 @Service
 public class JsltConverterService {
 
-    @SneakyThrows
     public void convertJsonFromJslt(ConverterModel converterModel) {
         converterModel.setJsonInput(this.loadJsonInput(converterModel));
 
-        if (isNull(converterModel.getPathOut()) || isNull(converterModel.getPathJsltTemplate())) {
-            log.info("JsltConverterService - SKIP");
+        if (isEmpty(converterModel.getPathOut()) || isEmpty(converterModel.getPathJsltTemplate())) {
+            log.warn("JsltConverterService - Ignored");
             return;
         }
 
-        log.info("Start - Converter Json");
-        long start = System.currentTimeMillis();
+        log.info("Start - Converting json based on jslt template.");
 
-
-        String jsltTemplate = this.loadJsltTemplate(converterModel);
-
-        List<Function> functions = CustomFunctionsUtil.loadCustomFunctions();
-        functions.add(new DistinctArrayFunction());
-
-        Expression jslt = Parser.compileString(jsltTemplate, functions);
+        Expression jslt = Parser.compileString(this.loadJsltTemplate(converterModel), this.loadingJsltCustomFunctions());
         JsonNode output = jslt.apply(converterModel.getJsonInput());
 
         converterModel.setJsonOutput(output);
-
-        exportFile(output, converterModel);
-
-        long end = System.currentTimeMillis();
-
-        log.info("End - Converter Json -> Time: " + (end - start) + "ms");
+        log.info("End - Start - Converting json based on jslt template.");
 
     }
 
-    private void exportFile(JsonNode output, ConverterModel directory) {
-        if (isEmpty(directory.getPathOut())) {
-            log.info("Informe o caminho de output para exportar o arquivo.");
-            return;
+    private List<Function> loadingJsltCustomFunctions() {
+        try {
+            List<Function> functions = CustomFunctionsUtil.loadCustomFunctions();
+            functions.add(new DistinctArrayFunction());
+            return functions;
+        } catch (Exception e) {
+            log.error("Error loading jslt custom functions: ", e);
+            throw new TechnicalException(ERROR_LOADING_JSLT_CUSTOM_FUNCTION);
         }
-
-        log.info("Inicio - Gravar arquivo.");
-
-        try (FileWriter file = new FileWriter(directory.getPathOut())) {
-            file.write(output.toPrettyString());
-            file.flush();
-        } catch (IOException e) {
-            throw new TechnicalException(MessageUtil.ERROR_WRITE_FILE);
-        }
-
-        log.info("Fim - Gravar arquivo.");
-
     }
 
-    @SneakyThrows
     private JsonNode loadJsonInput(ConverterModel converterModel) {
-        log.info("Inicio - Carregando File Input.");
-        JSONParser jsonParser = new JSONParser();
-        JSONObject jsonObject = (JSONObject) jsonParser.parse(new FileReader(converterModel.getPathIn()));
-        log.info("Fim - Carregando Input.");
-        return toJsonNode(jsonObject);
+        try {
+            log.info("Start - Loading the input File.");
+            JSONParser jsonParser = new JSONParser();
+            JSONObject jsonObject = (JSONObject) jsonParser.parse(new FileReader(converterModel.getPathIn()));
+            log.info("End - Loading the input File.");
+            return toJsonNode(jsonObject);
+        } catch (Exception e) {
+            log.error("Error reading input file: ", e);
+            throw new TechnicalException(ERROR_READING_INPUT_FILE);
+        }
+
     }
 
-    @SneakyThrows
     private String loadJsltTemplate(ConverterModel converterModel) {
-        log.info("Inicio - Carregando Template JSLT.");
-        Path path = Paths.get(getClass().getClassLoader()
-                .getResource(converterModel.getPathJsltTemplate()).toURI());
+        try {
+            log.info("Start - Loading jslt Template.");
+            Path path = Paths.get(getClass().getClassLoader()
+                    .getResource(converterModel.getPathJsltTemplate())
+                    .toURI());
 
-        Stream<String> lines = Files.lines(path);
-        String data = lines.collect(Collectors.joining("\n"));
-        lines.close();
-        log.info("Fim - Carregando Template JSLT.");
-        return data;
+            Stream<String> lines = Files.lines(path);
+            String data = lines.collect(Collectors.joining("\n"));
+            lines.close();
+            log.info("End - Loading jslt Template");
+            return data;
+        } catch (Exception e) {
+            log.error("Error reading jslt template: ", e);
+            throw new TechnicalException(ERROR_READING_JSLT_TEMPLATE);
+        }
     }
 
-    @SneakyThrows
     public JsonNode toJsonNode(JSONObject jsonObj) {
         ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.readTree(jsonObj.toString());
+        try {
+            return objectMapper.readTree(jsonObj.toString());
+        } catch (JsonProcessingException e) {
+            log.error("Error converting object to JsonNode: ", e);
+            throw new TechnicalException(ERROR_CONVERTING_OBJECT_TO_JSONNODE);
+        }
     }
 
 

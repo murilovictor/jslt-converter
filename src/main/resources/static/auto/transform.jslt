@@ -14,101 +14,12 @@ def toBoolean(field)
             {
               "name": .name,
               "code": .code,
+              "coverageTotal": size(.coverages),
               "coverages": [for(.coverages)
-                let coverageAttributes = .coverageAttributes
                 {
-                  "coverage": .coverage,
-                  "coverageDetail": .coverageDetail,
-                  "coveragePermissionSeparteAcquisition": toBoolean(.coveragePermissionSeparteAcquisition),
-                  "coverageAttributes": {
-                    "minLMI": {
-                      "amount": number($coverageAttributes.minLMI.amount),
-                      "unit": {
-                        "code": $coverageAttributes.minLMI.unit.code,
-                        "description": $coverageAttributes.minLMI.unit.description
-                      }
-                    },
-                    "maxLMI": {
-                      "amount": number($coverageAttributes.maxLMI.amount),
-                      "unit": {
-                        "code": $coverageAttributes.maxLMI.unit.code,
-                        "description": $coverageAttributes.maxLMI.unit.description
-                      }
-                    },
-                    "contractBase": [for($coverageAttributes.contractBase)
-                     let contractBaseType = .contractBaseType
-                      {
-                        "contractBaseType": $contractBaseType,
-                        "contractBaseMinValue": $contractBaseType.contractBaseMinValue,
-                        "contractBaseMaxValue": $contractBaseType.contractBaseMaxValue
-                      }
-                    ],
-                    "newCarMaximumCalculatingPeriod": number($coverageAttributes.newCarMaximumCalculatingPeriod),
-                    "newCarContractBase": [for($coverageAttributes.newCarContractBase)
-                      {
-                        "contractBaseType": .contractBaseType,
-                        "contractBaseMinValue":  .contractBaseMinValue,
-                        "contractBaseMaxValue": .contractBaseMaxValue
-                      }
-                    ],
-                    "fullIndemnityPercentage": {
-                      "amount": number($coverageAttributes.fullIndemnityPercentage.amount),
-                      "unit": {
-                        "code": $coverageAttributes.fullIndemnityPercentage.unit.code,
-                        "description": $coverageAttributes.fullIndemnityPercentage.unit.description
-                      }
-                    },
-                    "deductibleType": $coverageAttributes.deductibleType,
-                    "fullIndemnityDeductible": toBoolean($coverageAttributes.fullIndemnityDeductible),
-                    "deductiblePaymentByCoverage": toBoolean($coverageAttributes.deductiblePaymentByCoverage),
-                    "deductiblePercentage": {
-                      "amount": number($coverageAttributes.deductiblePercentage.amount),
-                      "unit": {
-                        "code": $coverageAttributes.deductiblePercentage.unit.code,
-                        "description": $coverageAttributes.deductiblePercentage.unit.description
-                      }
-                    },
-                    "mandatoryParticipation": $coverageAttributes.mandatoryParticipation,
-                    "geographicScopeCoverage": $coverageAttributes.geographicScopeCoverage,
-                    "geographicScopeCoverageOthers": $coverageAttributes.geographicScopeCoverageOthers[0]
-                  }
+                  * : .
                 }
-              ],
-              "carParts": [for(.carParts)
-                {
-                  "carPartCondition": .carPartCondition,
-                  "carPartType": .carPartType
-                }
-              ],
-              "carModels": distinctModels(.carModels, "fipeCode|model|manufacturer|year"),
-              "vehicleOvernightZipCode": .vehicleOvernightZipCode,
-              "additional": .additional,
-              "additionalOthers": .additionalOthers[0],
-              "assistanceServices": [for(.assistanceServices)
-                {
-                  "assistanceServicesPackage": .assistanceServicesPackage,
-                  "assistanceServicesDetail": .assistanceServicesDetail,
-                  "chargeTypeSignaling": .chargeTypeSignaling
-                }
-              ],
-              "termsAndConditions": [for(.termsAndConditions)
-                {
-                  "susepProcessNumber": .susepProcessNumber,
-                  "definition": .definition
-                }
-              ],
-              "terms": .terms,
-              "customerService": .customerService,
-              "premiumPayment": {
-                "paymentMethod": .premiumPayment[0].paymentMethod,
-                "paymentType": .premiumPayment[0].paymentType,
-                "paymentDetail": .premiumPayment[0].paymentDetail
-              },
-              "minimumRequirements": {
-                "contractingType": .minimumRequirements[0].contractingType,
-                "contractingMinRequirement": .minimumRequirements[0].contractingMinRequirement
-              },
-              "targetAudiences": .targetAudiences
+              ]
             }
           ]
         }

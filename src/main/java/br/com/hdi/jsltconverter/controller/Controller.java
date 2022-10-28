@@ -1,7 +1,5 @@
 package br.com.hdi.jsltconverter.controller;
 
-import br.com.hdi.jsltconverter.exception.TechnicalException;
-import br.com.hdi.jsltconverter.message.enumeration.MessageUtil;
 import br.com.hdi.jsltconverter.model.ConverterModel;
 import br.com.hdi.jsltconverter.service.JsltConverterService;
 import br.com.hdi.jsltconverter.service.ProcessorService;
@@ -21,20 +19,18 @@ public class Controller {
     @GetMapping("auto")
     public ResponseEntity<JsonNode> auto() {
 
-
-
         ConverterModel converterModel = ConverterModel
                 .builder()
                 .pathIn("src/main/resources/static/auto/input.json")
-                // Para transformar o arquivo descomentar as linhas abaixo
-                // .pathOut("src/main/resources/static/auto/output.json")
-                // .pathJsltTemplate("static/auto/transform.jslt")
+//                // Para transformar o arquivo descomentar as linhas abaixo
+//                .pathOut("src/main/resources/static/auto/output.json")
+//                .pathJsltTemplate("static/auto/transform.jslt")
                 .schemaTemplate("/static/auto/schema.json")
                 .build();
 
 
-
-        return ResponseEntity.ok(processorService.execute(converterModel));
+        return ResponseEntity.ok(processorService.execute(converterModel)
+                .getJsonOutput());
     }
 
     @GetMapping("home")
@@ -47,7 +43,8 @@ public class Controller {
                 .schemaTemplate("/static/home/schema.json")
                 .build();
 
-        return ResponseEntity.ok(processorService.execute(converterModel));
+        return ResponseEntity.ok(processorService.execute(converterModel)
+                .getJsonOutput());
     }
 
 }

@@ -7,7 +7,6 @@ import com.networknt.schema.JsonSchema;
 import com.networknt.schema.JsonSchemaFactory;
 import com.networknt.schema.SpecVersion;
 import com.networknt.schema.ValidationMessage;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Service;
@@ -19,15 +18,13 @@ import java.util.Set;
 @Service
 public class JsonSchemaValidatorService {
 
-    @SneakyThrows
     public void validateSchema(ConverterModel converterModel) {
         if (Strings.isEmpty(converterModel.getSchemaTemplate())) {
-            log.info("Informe o caminho do schema para validar.");
+            log.warn("To validate the schama, enter the path.");
             return;
         }
 
-        log.info("Start - Schema Validation");
-        long start = System.currentTimeMillis();
+        log.info("Start - Json Schema Validation");
 
         JsonNode jsonForValidate = Objects.nonNull(converterModel.getJsonOutput()) ? converterModel.getJsonOutput() : converterModel.getJsonInput();
 
@@ -35,13 +32,12 @@ public class JsonSchemaValidatorService {
         JsonSchema jsonSchema = factory.getSchema(JsonSchemaValidatorService.class.getResourceAsStream(converterModel.getSchemaTemplate()));
         Set<ValidationMessage> errors = jsonSchema.validate(jsonForValidate);
 
-        long end = System.currentTimeMillis();
-        log.info("End - Schema Validation -> Time: " + (end - start) + "ms");
+        log.info("End - Json Schema Validation");
 
         if (errors.isEmpty()) {
-            log.info("SCHAMA: SUCCESS");
+            log.info("Successfully validated schema. ");
         } else {
-            log.info("Qtde. Errors: {}", errors.size());
+            log.info("Number of errors found: {}", errors.size());
             throw new JsonSchemaException(errors);
         }
 

@@ -17,4 +17,9 @@ public class MessageService {
         return messageSource.getMessage(message, null, defaultMessage, Locale.US);
     }
 
+    public String getMessage(String message, Object... args) {
+        String defaultMessage = "Mensagem não localizada. " + message;
+        return messageSource.getMessage(message, args, defaultMessage, Locale.US);
+    }
+
 }
