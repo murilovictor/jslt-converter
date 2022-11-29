@@ -5,7 +5,7 @@ import br.com.hdi.jsltconverter.exception.JsonSchemaException;
 import br.com.hdi.jsltconverter.exception.TechnicalException;
 import br.com.hdi.jsltconverter.exception.model.ApiErrorResponse;
 import br.com.hdi.jsltconverter.exception.model.ApiMessage;
-import br.com.hdi.jsltconverter.message.service.MessageService;
+import br.com.hdi.jsltconverter.exception.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

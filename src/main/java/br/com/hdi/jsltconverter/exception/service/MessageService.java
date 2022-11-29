@@ -1,4 +1,4 @@
-package br.com.hdi.jsltconverter.message.service;
+package br.com.hdi.jsltconverter.exception.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;

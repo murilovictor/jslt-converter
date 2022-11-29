@@ -38,8 +38,8 @@ public class Controller {
         ConverterModel converterModel = ConverterModel
                 .builder()
                 .pathIn("src/main/resources/static/home/input.json")
-                .pathOut("src/main/resources/static/home/output.json")
-                .pathJsltTemplate("static/home/transform.jslt")
+//                .pathOut("src/main/resources/static/home/output.json")
+//                .pathJsltTemplate("static/home/transform.jslt")
                 .schemaTemplate("/static/home/schema.json")
                 .build();
 
