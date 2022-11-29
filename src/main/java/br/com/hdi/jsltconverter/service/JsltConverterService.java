@@ -63,10 +63,10 @@ public class JsltConverterService {
     }
 
     private JsonNode loadJsonInput(ConverterModel converterModel) {
-        try {
+        try (FileReader fileReader = new FileReader(converterModel.getPathIn())){
             log.info("Start - Loading the input File.");
             JSONParser jsonParser = new JSONParser();
-            JSONObject jsonObject = (JSONObject) jsonParser.parse(new FileReader(converterModel.getPathIn()));
+            JSONObject jsonObject = (JSONObject) jsonParser.parse(fileReader);
             log.info("End - Loading the input File.");
             return toJsonNode(jsonObject);
         } catch (Exception e) {
